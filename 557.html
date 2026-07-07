@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potato - سرمایه‌گذاری USDT</title>
+    <!-- Bootstrap 5 RTL -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c3b2a;
+            --gold: #f4a261;
+            --dark: #2d1b0e;
+            --light-bg: #f8f4f0;
+            --success: #2d6a4f;
+            --danger: #e63946;
+        }
+        * {
+            font-family: 'Tahoma', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: var(--light-bg);
+            min-height: 100vh;
+        }
+
+        /* ===== صفحه ثبت‌نام ===== */
+        #registerPage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2d1b0e 0%, #4a2c1a 50%, #6c3b2a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: all 0.8s ease;
+        }
+        #registerPage.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.9);
+        }
+        .register-box {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 35px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            animation: fadeUp 0.6s ease;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .register-box .logo {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--primary);
+            text-align: center;
+        }
+        .register-box .logo i { color: var(--gold); }
+        .register-box .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+        .register-box .form-control {
+            border-radius: 12px;
+            padding: 11px 16px;
+            border: 2px solid #e0d6cd;
+        }
+        .register-box .form-control:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 0.2rem rgba(244, 162, 97, 0.25);
+        }
+        .btn-register {
+            background: linear-gradient(135deg, #6c3b2a, #4a2c1a);
+            color: white;
+            padding: 14px;
+            border-radius: 50px;
+            font-weight: 700;
+            border: none;
+            width: 100%;
+            transition: all 0.3s;
+            font-size: 17px;
+        }
+        .btn-register:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(108, 59, 42, 0.4);
+            color: var(--gold);
+        }
+
+        /* ===== صفحه اصلی ===== */
+        #mainPage {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+        #mainPage.show {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Navbar */
+        .navbar-potato {
+            background: linear-gradient(135deg, #4a2c1a, #6c3b2a);
+            padding: 10px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar-potato .brand {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--gold);
+            text-decoration: none;
+        }
+        .navbar-potato .brand i { margin-left: 10px; }
+        .navbar-potato .user-info {
+            color: rgba(255,255,255,0.9);
+            font-size: 14px;
+        }
+        .navbar-potato .user-info i { color: var(--gold); }
+        .navbar-potato .nav-link {
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .navbar-potato .nav-link:hover {
+            background: rgba(255,255,255,0.15);
+            color: var(--gold);
+        }
+        .navbar-potato .nav-link.active {
+            background: rgba(244, 162, 97, 0.2);
+            color: var(--gold);
+        }
+
+        /* Hero */
+        .hero-potato {
+            background: linear-gradient(135deg, #2d1b0e, #4a2c1a, #6c3b2a);
+            padding: 40px 0 30px;
+            color: white;
+            border-bottom: 4px solid var(--gold);
+        }
+        .hero-potato h1 {
+            font-size: 32px;
+            font-weight: 900;
+        }
+        .hero-potato h1 span { color: var(--gold); }
+        .hero-potato .stat-box {
+            background: rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 12px 16px;
+            text-align: center;
+            border: 1px solid rgba(244, 162, 97, 0.3);
+        }
+        .hero-potato .stat-box .num {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--gold);
+        }
+        .hero-potato .stat-box .label {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* ===== کارت‌های پلن ===== */
+        .plan-card {
+            background: white;
+            border-radius: 16px;
+            padding: 18px 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            height: 100%;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        .plan-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--gold);
+            box-shadow: 0 12px 40px rgba(244, 162, 97, 0.2);
+        }
+        .plan-card .icon {
+            font-size: 28px;
+            color: var(--primary);
+        }
+        .plan-card .name {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 15px;
+            margin: 6px 0 2px;
+        }
+        .plan-card .price {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--primary);
+        }
+        .plan-card .price small {
+            font-size: 12px;
+            font-weight: 400;
+            color: #888;
+        }
+        .plan-card .profit {
+            color: var(--success);
+            font-weight: 700;
+            font-size: 18px;
+            background: #e6f9f1;
+            padding: 3px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 4px 0;
+        }
+        .plan-card .days {
+            color: #888;
+            font-size: 12px;
+        }
+        .plan-card .btn-invest {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 6px;
+            font-size: 13px;
+        }
+        .plan-card .btn-invest:hover {
+            background: var(--gold);
+            color: var(--dark);
+        }
+        .plan-card.popular {
+            border-color: var(--gold);
+            position: relative;
+            overflow: hidden;
+        }
+        .plan-card.popular::before {
+            content: "⭐ محبوب";
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--gold);
+            color: var(--dark);
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        /* ===== بخش واریز و برداشت ===== */
+        .transaction-box {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            height: 100%;
+        }
+        .transaction-box h5 {
+            color: var(--dark);
+            font-weight: 700;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 10px;
+        }
+        .transaction-box .address-box {
+            background: #f0ebe6;
+            padding: 12px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 13px;
+            word-break: break-all;
+            direction: ltr;
+            text-align: left;
+        }
+        .transaction-box .btn-copy {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 4px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        .transaction-box .btn-copy:hover {
+            background: var(--gold);
+            color: var(--dark);
+        }
+        .transaction-box .form-control {
+            border-radius: 10px;
+            border: 2px solid #e0d6cd;
+            padding: 10px 14px;
+        }
+        .transaction-box .form-control:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 0.2rem rgba(244, 162, 97, 0.25);
+        }
+        .btn-withdraw {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50px;
+            font-weight: 700;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        .btn-withdraw:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(230, 57, 70, 0.3);
+        }
+        .btn-deposit {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50px;
+            font-weight: 700;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        .btn-deposit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 106, 79, 0.3);
+        }
+
+        /* ===== داشبورد مدیریت ===== */
+        .admin-box {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        .admin-box .admin-stat {
+            background: var(--light-bg);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .admin-box .admin-stat .num {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--primary);
+        }
+        .admin-box .admin-stat .label {
+            color: #888;
+            font-size: 13px;
+        }
+        .admin-box .table th {
+            background: var(--primary);
+            color: white;
+        }
+        .admin-box .badge-pending {
+            background: #ffc107;
+            color: #333;
+        }
+        .admin-box .badge-completed {
+            background: var(--success);
+            color: white;
+        }
+        .admin-box .badge-rejected {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* ===== بخش‌های مخفی ===== */
+        .page-section {
+            display: none;
+        }
+        .page-section.active {
+            display: block;
+        }
+
+        /* ===== فوتر ===== */
+        .footer-potato {
+            background: var(--dark);
+            color: rgba(255,255,255,0.7);
+            padding: 20px 0;
+            margin-top: 40px;
+            border-top: 3px solid var(--gold);
+        }
+
+        /* ===== واکنش‌گرا ===== */
+        @media (max-width: 768px) {
+            .register-box { padding: 25px 20px; margin: 15px; }
+            .hero-potato h1 { font-size: 22px; }
+            .plan-card .price { font-size: 18px; }
+            .plan-card .profit { font-size: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================ -->
+<!-- صفحه اول: ثبت‌نام -->
+<!-- ============================================ -->
+<div id="registerPage">
+    <div class="register-box">
+        <div class="logo"><i class="fas fa-seedling"></i> Potato</div>
+        <div class="subtitle">
+            <i class="fas fa-wallet text-success me-1"></i> سرمایه‌گذاری USDT با سود روزانه ۱۰٪
+        </div>
+        <form id="registerForm">
+            <div class="mb-2">
+                <label class="form-label fw-bold">نام کامل</label>
+                <input type="text" id="fullName" class="form-control" placeholder="مثال: احمد رضایی" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label fw-bold">نام کاربری</label>
+                <input type="text" id="username" class="form-control" placeholder="یک نام کاربری انتخاب کنید" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label fw-bold">ایمیل</label>
+                <input type="email" id="email" class="form-control" placeholder="example@gmail.com" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label fw-bold">شماره موبایل</label>
+                <input type="tel" id="phone" class="form-control" placeholder="۰۹۱۲ XXX XXXX" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label fw-bold">رمز عبور</label>
+                <input type="password" id="password" class="form-control" placeholder="حداقل ۸ کاراکتر" required minlength="8">
+            </div>
+            <div class="mb-2">
+                <label class="form-label fw-bold">تکرار رمز عبور</label>
+                <input type="password" id="confirmPassword" class="form-control" placeholder="رمز را دوباره وارد کنید" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label fw-bold">آدرس کیف پول TRC20 (برای برداشت)</label>
+                <input type="text" id="wallet" class="form-control" placeholder="TQ... (آدرس کیف پول خود را وارد کنید)">
+            </div>
+            <div class="mb-2 form-check">
+                <input class="form-check-input" type="checkbox" id="agree" required>
+                <label class="form-check-label" for="agree" style="font-size:13px;">
+                    با <a href="#">قوانین و شرایط</a> Potato موافقم
+                </label>
+            </div>
+            <button type="submit" class="btn-register">
+                <i class="fas fa-user-check me-2"></i> ثبت‌نام و ورود
+            </button>
+            <div class="text-center mt-2">
+                <small class="text-muted">قبلاً حساب دارید؟ <a href="#" style="color:var(--primary); font-weight:600;">وارد شوید</a></small>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- صفحه اصلی -->
+<!-- ============================================ -->
+<div id="mainPage">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-potato">
+        <div class="container">
+            <a class="brand" href="#"><i class="fas fa-seedling"></i> Potato</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon" style="filter:invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link active" data-page="dashboard" href="#"><i class="fas fa-th-large me-1"></i> داشبورد</a></li>
+                    <li class="nav-item"><a class="nav-link" data-page="plans" href="#"><i class="fas fa-chart-line me-1"></i> پلن‌ها</a></li>
+                    <li class="nav-item"><a class="nav-link" data-page="deposit" href="#"><i class="fas fa-arrow-down me-1"></i> واریز</a></li>
+                    <li class="nav-item"><a class="nav-link" data-page="withdraw" href="#"><i class="fas fa-arrow-up me-1"></i> برداشت</a></li>
+                    <li class="nav-item"><a class="nav-link" data-page="admin" href="#"><i class="fas fa-user-shield me-1"></i> مدیریت</a></li>
+                </ul>
+                <div class="user-info">
+                    <i class="fas fa-user-circle me-1"></i>
+                    <span id="displayUsername">کاربر</span>
+                    <span class="badge bg-warning text-dark ms-2">
+                        <i class="fas fa-wallet me-1"></i> <span id="userBalance">۰</span> USDT
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero-potato">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <h1>به <span>Potato</span> خوش آمدید</h1>
+                    <p class="mt-2" style="color:rgba(255,255,255,0.85);">
+                        <i class="fas fa-check-circle text-success me-1"></i>
+                        ۲۰ پلن سرمایه‌گذاری با <strong>۱۰٪ سود روزانه</strong>
+                    </p>
+                    <p style="color:rgba(255,255,255,0.6); font-size:14px;">
+                        <i class="fas fa-arrow-up text-warning me-1"></i> واریز و برداشت آنی با USDT (شبکه TRC20)
+                    </p>
+                </div>
+                <div class="col-lg-5 mt-3 mt-lg-0">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="stat-box">
+                                <div class="num" id="totalUsers">+۲۰۰</div>
+                                <div class="label">کاربر فعال</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-box">
+                                <div class="num" id="totalInvest">$۸۵K</div>
+                                <div class="label">سرمایه کل</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-box">
+                                <div class="num">۹۹٪</div>
+                                <div class="label">رضایت کاربران</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-box">
+                                <div class="num">۱۰٪</div>
+                                <div class="label">سود روزانه</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== محتوای اصلی ===== -->
+    <div class="container py-4">
+
+        <!-- ===== بخش داشبورد ===== -->
+        <div id="section-dashboard" class="page-section active">
+            <div class="row g-3 mb-4">
+                <div class="col-md-3 col-6">
+                    <div class="transaction-box text-center">
+                        <i class="fas fa-coins" style="font-size:32px; color:var(--gold);"></i>
+                        <h6 class="mt-2">کل سرمایه‌گذاری</h6>
+                        <h4 class="text-primary" id="dashTotalInvest">۱۲,۵۰۰ USDT</h4>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="transaction-box text-center">
+                        <i class="fas fa-arrow-up" style="font-size:32px; color:var(--success);"></i>
+                        <h6 class="mt-2">سود کل</h6>
+                        <h4 class="text-success" id="dashTotalProfit">+۱,۲۴۰ USDT</h4>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="transaction-box text-center">
+                        <i class="fas fa-clock" style="font-size:32px; color:var(--gold);"></i>
+                        <h6 class="mt-2">سرمایه‌گذاری فعال</h6>
+                        <h4 class="text-warning" id="dashActivePlans">۳ پلن</h4>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="transaction-box text-center">
+                        <i class="fas fa-hourglass-half" style="font-size:32px; color:var(--danger);"></i>
+                        <h6 class="mt-2">در انتظار برداشت</h6>
+                        <h4 class="text-danger" id="dashPendingWithdraw">۲۵۰ USDT</h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- تاریخچه سود -->
+            <div class="transaction-box">
+                <h5><i class="fas fa-history me-2"></i> تاریخچه سود روزانه</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr><th>تاریخ</th><th>پلن</th><th>مبلغ سود</th><th>وضعیت</th></tr>
+                        </thead>
+                        <tbody id="profitHistory">
+                            <tr>
+                                <td>۱۴۰۵/۰۴/۱۴</td><td>پلن طلایی</td>
+                                <td class="text-success">+۲۵ USDT</td>
+                                <td><span class="badge bg-success">پرداخت شده</span></td>
+                            </tr>
+                            <tr>
+                                <td>۱۴۰۵/۰۴/۱۳</td><td>پلن رشد</td>
+                                <td class="text-success">+۱۰ USDT</td>
+                                <td><span class="badge bg-success">پرداخت شده</span></td>
+                            </tr>
+                            <tr>
+                                <td>۱۴۰۵/۰۴/۱۲</td><td>پلن الماس</td>
+                                <td class="text-success">+۵۰ USDT</td>
+                                <td><span class="badge bg-warning text-dark">در انتظار</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== بخش پلن‌ها ===== -->
+        <div id="section-plans" class="page-section">
+            <div class="text-center mb-4">
+                <h3 style="color:var(--dark); font-weight:900;">
+                    <i class="fas fa-cubes text-warning me-2"></i> ۲۰ پلن سرمایه‌گذاری
+                </h3>
+                <p class="text-muted">همه پلن‌ها <strong>۱۰٪ سود روزانه</strong> دارند</p>
+            </div>
+            <div class="row g-3" id="plansContainer"></div>
+        </div>
+
+        <!-- ===== بخش واریز ===== -->
+        <div id="section-deposit" class="page-section">
+            <div class="row">
+                <div class="col-lg-6 mx-auto">
+                    <div class="transaction-box">
+                        <h5><i class="fas fa-arrow-down text-success me-2"></i> واریز USDT</h5>
+                        <hr>
+                        <p class="text-muted">برای واریز، مبلغ را به آدرس زیر ارسال کنید:</p>
+                        <div class="address-box" id="depositAddress">
+                            TQmZxYz1234567890ABCDEFGHIJKLMNOPQRSTUV
+                        </div>
+                        <div class="mt-2 d-flex gap-2">
+                            <button class="btn-copy" onclick="copyAddress()"><i class="fas fa-copy me-1"></i> کپی آدرس</button>
+                            <span class="badge bg-success ms-auto"><i class="fas fa-check-circle me-1"></i> شبکه TRC20</span>
+                        </div>
+                        <div class="mt-3">
+                            <label class="fw-bold">مبلغ واریزی (USDT)</label>
+                            <div class="input-group mt-1">
+                                <input type="number" id="depositAmount" class="form-control" placeholder="مبلغ را وارد کنید" value="100">
+                                <button class="btn-deposit" onclick="simulateDeposit()" style="width:auto; padding:10px 25px;">
+                                    <i class="fas fa-check me-1"></i> تایید واریز
+                                </button>
+                            </div>
+                            <small class="text-muted">حداقل واریز: ۱۰ USDT</small>
+                        </div>
+                        <div id="depositStatus" class="mt-3 text-center"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== بخش برداشت ===== -->
+        <div id="section-withdraw" class="page-section">
+            <div class="row">
+                <div class="col-lg-6 mx-auto">
+                    <div class="transaction-box">
+                        <h5><i class="fas fa-arrow-up text-danger me-2"></i> درخواست برداشت</h5>
+                        <hr>
+                        <div class="mb-3">
+                            <label class="fw-bold">مبلغ (USDT)</label>
+                            <input type="number" id="withdrawAmount" class="form-control" placeholder="مبلغ را وارد کنید" value="50">
+                            <small class="text-muted">حداقل برداشت: ۵۰ USDT | کارمزد: ۱ USDT</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">آدرس کیف پول TRC20</label>
+                            <input type="text" id="withdrawAddress" class="form-control" placeholder="آدرس TRC20 خود را وارد کنید">
+                        </div>
+                        <button class="btn-withdraw" onclick="requestWithdraw()">
+                            <i class="fas fa-paper-plane me-2"></i> ثبت درخواست برداشت
+                        </button>
+                        <div id="withdrawStatus" class="mt-3 text-center"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== بخش مدیریت ===== -->
+        <div id="section-admin" class="page-section">
+            <div class="admin-box">
+                <h5><i class="fas fa-user-shield text-warning me-2"></i> داشبورد مدیریت</h5>
+                <hr>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3 col-6">
+                        <div class="admin-stat">
+                            <div class="num" id="adminTotalUsers">۱۵۸</div>
+                            <div class="label">کل کاربران</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="admin-stat">
+                            <div class="num" id="adminTotalInvest">$۴۲,۵۰۰</div>
+                            <div class="label">کل سرمایه</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="admin-stat">
+                            <div class="num" id="adminPendingWithdraw">۱۲</div>
+                            <div class="label">درخواست‌های برداشت</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="admin-stat">
+                            <div class="num" id="adminTodayProfit">$۱,۲۴۰</div>
+                            <div class="label">سود امروز</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- لیست کاربران -->
+                <h6><i class="fas fa-users me-2"></i> لیست کاربران</h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr><th>کاربر</th><th>سرمایه</th><th>سود کل</th><th>وضعیت</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>احمد رضایی</td><td>۵,۰۰۰ USDT</td><td>+۵۰۰ USDT</td><td><span class="badge bg-success">فعال</span></td></tr>
+                            <tr><td>سارا محمدی</td><td>۲,۵۰۰ USDT</td><td>+۲۵۰ USDT</td><td><span class="badge bg-success">فعال</span></td></tr>
+                            <tr><td>علی کریمی</td><td>۱,۰۰۰ USDT</td><td>+۸۰ USDT</td><td><span class="badge bg-warning text-dark">در انتظار</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- درخواست‌های برداشت -->
+                <h6 class="mt-3"><i class="fas fa-clock me-2"></i> درخواست‌های برداشت</h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr><th>کاربر</th><th>مبلغ</th><th>آدرس</th><th>وضعیت</th><th>عملیات</th></tr>
+                        </thead>
+                        <tbody id="withdrawRequests">
+                            <tr>
+                                <td>احمد رضایی</td><td>۲۵۰ USDT</td>
+                                <td style="font-size:11px;">TQmZ...XYZ</td>
+                                <td><span class="badge badge-pending">در انتظار</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-success" onclick="approveWithdraw(this)">تایید</button>
+                                    <button class="btn btn-sm btn-danger" onclick="rejectWithdraw(this)">رد</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>سارا محمدی</td><td>۱۰۰ USDT</td>
+                                <td style="font-size:11px;">TR7N...Lj6t</td>
+                                <td><span class="badge badge-pending">در انتظار</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-success" onclick="approveWithdraw(this)">تایید</button>
+                                    <button class="btn btn-sm btn-danger" onclick="rejectWithdraw(this)">رد</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-potato">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 style="color:var(--gold);"><i class="fas fa-seedling me-2"></i> Potato</h5>
+                    <p style="font-size:13px;">پلتفرم سرمایه‌گذاری USDT با سود روزانه ۱۰٪</p>
+                </div>
+                <div class="col-md-4">
+                    <h6 style="color:var(--gold);">لینک‌ها</h6>
+                    <ul class="list-unstyled" style="font-size:13px;">
+                        <li><a href="#" style="color:rgba(255,255,255,0.7); text-decoration:none;">درباره ما</a></li>
+                        <li><a href="#" style="color:rgba(255,255,255,0.7); text-decoration:none;">قوانین</a></li>
+                        <li><a href="#" style="color:rgba(255,255,255,0.7); text-decoration:none;">پشتیبانی</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6 style="color:var(--gold);">شبکه‌های اجتماعی</h6>
+                    <a href="#" class="me-2" style="color:rgba(255,255,255,0.7); font-size:20px;"><i class="fab fa-telegram"></i></a>
+                    <a href="#" class="me-2" style="color:rgba(255,255,255,0.7); font-size:20px;"><i class="fab fa-twitter"></i></a>
+                    <a href="#" style="color:rgba(255,255,255,0.7); font-size:20px;"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <hr class="border-light opacity-25">
+            <div class="text-center small">© ۲۰۲۵ Potato - تمامی حقوق محفوظ است</div>
+        </div>
+    </footer>
+</div>
+
+<!-- ============================================ -->
+<!-- جاوااسکریپت کامل -->
+<!-- ============================================ -->
+<script>
+    // ===== ۱. اطلاعات ۲۰ پلن =====
+    const plans = [
+        { name: "نهادی", icon: "fa-seedling", price: 50, days: 7 },
+        { name: "رشد", icon: "fa-leaf", price: 100, days: 10 },
+        { name: "طلایی", icon: "fa-tree", price: 250, days: 14, popular: true },
+        { name: "الماس", icon: "fa-gem", price: 500, days: 20 },
+        { name: "سلطنتی", icon: "fa-crown", price: 750, days: 25 },
+        { name: "یاقوت", icon: "fa-gem", price: 1000, days: 30 },
+        { name: "ستاره", icon: "fa-star", price: 1500, days: 35 },
+        { name: "شهاب", icon: "fa-meteor", price: 2000, days: 40 },
+        { name: "آفتاب", icon: "fa-sun", price: 2500, days: 45 },
+        { name: "ماه", icon: "fa-moon", price: 3000, days: 50 },
+        { name: "جهان", icon: "fa-globe", price: 4000, days: 55 },
+        { name: "بی‌نهایت", icon: "fa-infinity", price: 5000, days: 60 },
+        { name: "اژدها", icon: "fa-dragon", price: 6000, days: 65 },
+        { name: "ققنوس", icon: "fa-phoenix", price: 7500, days: 70 },
+        { name: "تک‌شاخ", icon: "fa-unicorn", price: 9000, days: 75 },
+        { name: "موشک", icon: "fa-rocket", price: 10000, days: 80 },
+        { name: "صاعقه", icon: "fa-bolt", price: 12000, days: 85 },
+        { name: "نهنگ", icon: "fa-whale", price: 15000, days: 90 },
+        { name: "کهکشان", icon: "fa-galaxy", price: 20000, days: 95 },
+        { name: "کیهان", icon: "fa-universe", price: 25000, days: 100 }
+    ];
+
+    // ===== ۲. ساخت کارت‌های پلن =====
+    function renderPlans() {
+        const container = document.getElementById('plansContainer');
+        container.innerHTML = '';
+        plans.forEach(plan => {
+            const totalProfit = (plan.price * 0.10 * plan.days).toFixed(0);
+            const col = document.createElement('div');
+            col.className = 'col-lg-3 col-md-4 col-6';
+            col.innerHTML = `
+                <div class="plan-card ${plan.popular ? 'popular' : ''}">
+                    <div class="icon"><i class="fas ${plan.icon}"></i></div>
+                    <div class="name">${plan.name}</div>
+                    <div class="price">${plan.price.toLocaleString()} <small>USDT</small></div>
+                    <div class="profit">+۱۰٪ روزانه</div>
+                    <div class="days">${plan.days} روز | سود کل: ${totalProfit} USDT</div>
+                    <button class="btn-invest" onclick="invest('${plan.name}', ${plan.price})">
+                        <i class="fas fa-arrow-right me-1"></i> سرمایه‌گذاری
+                    </button>
+                </div>
+            `;
+            container.appendChild(col);
+        });
+    }
+
+    // ===== ۳. توابع سرمایه‌گذاری =====
+    function invest(name, price) {
+        const balance = parseInt(localStorage.getItem('potato_balance') || '0');
+        if (balance < price) {
+            alert(`❌ موجودی شما (${balance} USDT) کافی نیست!\nلطفاً ابتدا واریز کنید.`);
+            return;
+        }
+        const newBalance = balance - price;
+        localStorage.setItem('potato_balance', newBalance.toString());
+        document.getElementById('userBalance').textContent = newBalance.toLocaleString();
+        alert(`✅ سرمایه‌گذاری در "${name}" با مبلغ ${price.toLocaleString()} USDT انجام شد.\nسود روزانه ۱۰٪ به حسابتان واریز می‌شود.`);
+        updateDashboard();
+    }
+
+    // ===== ۴. سیستم واریز =====
+    function copyAddress() {
+        const addr = document.getElementById('depositAddress').textContent;
+        navigator.clipboard.writeText(addr).then(() => {
+            alert('✅ آدرس کپی شد!');
+        });
+    }
+
+    function simulateDeposit() {
+        const amount = parseInt(document.getElementById('depositAmount').value) || 0;
+        if (amount < 10) {
+            document.getElementById('depositStatus').innerHTML = '<div class="alert alert-danger">حداقل واریز ۱۰ USDT است.</div>';
+            return;
+        }
+        const currentBalance = parseInt(localStorage.getItem('potato_balance') || '0');
+        const newBalance = currentBalance + amount;
+        localStorage.setItem('potato_balance', newBalance.toString());
+        document.getElementById('userBalance').textContent = newBalance.toLocaleString();
+        document.getElementById('depositStatus').innerHTML = `
+            <div class="alert alert-success">
+                ✅ ${amount} USDT با موفقیت واریز شد!<br>
+                موجودی جدید: ${newBalance.toLocaleString()} USDT
+            </div>
+        `;
+        updateDashboard();
+    }
+
+    // ===== ۵. سیستم برداشت =====
+    function requestWithdraw() {
+        const amount = parseInt(document.getElementById('withdrawAmount').value) || 0;
+        const address = document.getElementById('withdrawAddress').value.trim();
+        const balance = parseInt(localStorage.getItem('potato_balance') || '0');
+
+        if (amount < 50) {
+            document.getElementById('withdrawStatus').innerHTML = '<div class="alert alert-danger">حداقل برداشت ۵۰ USDT است.</div>';
+            return;
+        }
+        if (amount > balance) {
+            document.getElementById('withdrawStatus').innerHTML = `<div class="alert alert-danger">موجودی کافی نیست! موجودی: ${balance} USDT</div>`;
+            return;
+        }
+        if (!address || address.length < 20) {
+            document.getElementById('withdrawStatus').innerHTML = '<div class="alert alert-danger">لطفاً آدرس معتبر TRC20 وارد کنید.</div>';
+            return;
+        }
+
+        const fee = 1;
+        const netAmount = amount - fee;
+        const newBalance = balance - amount;
+        localStorage.setItem('potato_balance', newBalance.toString());
+        document.getElementById('userBalance').textContent = newBalance.toLocaleString();
+
+        document.getElementById('withdrawStatus').innerHTML = `
+            <div class="alert alert-success">
+                ✅ درخواست برداشت ${amount} USDT ثبت شد.<br>
+                مبلغ خالص (با کسر کارمزد): ${netAmount} USDT<br>
+                آدرس: ${address.substring(0, 10)}...${address.substring(address.length - 6)}<br>
+                <small class="text-muted">وضعیت: در انتظار تایید ادمین</small>
+            </div>
+        `;
+        updateDashboard();
+        // اضافه کردن به لیست درخواست‌های مدیریت
+        addWithdrawRequest('کاربر جاری', amount, address);
+    }
+
+    // ===== ۶. مدیریت برداشت =====
+    function addWithdrawRequest(user, amount, address) {
+        const tbody = document.getElementById('withdrawRequests');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${user}</td>
+            <td>${amount} USDT</td>
+            <td style="font-size:11px;">${address.substring(0, 10)}...${address.substring(address.length - 6)}</td>
+            <td><span class="badge badge-pending">در انتظار</span></td>
+            <td>
+                <button class="btn btn-sm btn-success" onclick="approveWithdraw(this)">تایید</button>
+                <button class="btn btn-sm btn-danger" onclick="rejectWithdraw(this)">رد</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    }
+
+    function approveWithdraw(btn) {
+        const row = btn.closest('tr');
+        row.querySelector('td:nth-child(4)').innerHTML = '<span class="badge badge-completed">تایید شده</span>';
+        btn.closest('td').innerHTML = '<span class="text-success">✓ انجام شد</span>';
+        alert('✅ برداشت تایید شد.');
+    }
+
+    function rejectWithdraw(btn) {
+        const row = btn.closest('tr');
+        row.querySelector('td:nth-child(4)').innerHTML = '<span class="badge badge-rejected">رد شده</span>';
+        btn.closest('td').innerHTML = '<span class="text-danger">✗ رد شد</span>';
+        alert('❌ درخواست برداشت رد شد.');
+    }
+
+    // ===== ۷. ناوبری بین بخش‌ها =====
+    document.querySelectorAll('[data-page]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const page = this.dataset.page;
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(`section-${page}`).classList.add('active');
+            document.querySelectorAll('[data-page]').forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // ===== ۸. به‌روزرسانی داشبورد =====
+    function updateDashboard() {
+        const balance = parseInt(localStorage.getItem('potato_balance') || '0');
+        document.getElementById('userBalance').textContent = balance.toLocaleString();
+        // آمارهای دیگر به صورت شبیه‌سازی شده
+    }
+
+    // ===== ۹. ثبت‌نام =====
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const fullName = document.getElementById('fullName').value.trim();
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const password = document.getElementById('password').value;
+        const confirm = document.getElementById('confirmPassword').value;
+        const wallet = document.getElementById('wallet').value.trim();
+        const agree = document.getElementById('agree').checked;
+
+        if (!fullName || !username || !email || !phone || !password || !confirm) {
+            alert('❌ لطفاً تمام فیلدهای الزامی را پر کنید.');
+            return;
+        }
+        if (password !== confirm) {
+            alert('❌ رمز عبور و تکرار آن مطابقت ندارند.');
+            return;
+        }
+        if (password.length < 8) {
+            alert('❌ رمز عبور باید حداقل ۸ کاراکتر باشد.');
+            return;
+        }
+        if (!agree) {
+            alert('❌ لطفاً با قوانین و شرایط موافقت کنید.');
+            return;
+        }
+
+        // ذخیره اطلاعات
+        localStorage.setItem('potato_username', username);
+        localStorage.setItem('potato_fullname', fullName);
+        localStorage.setItem('potato_wallet', wallet);
+        if (!localStorage.getItem('potato_balance')) {
+            localStorage.setItem('potato_balance', '100'); // ۱۰۰ USDT هدیه شروع
+        }
+
+        // نمایش
+        document.getElementById('displayUsername').textContent = username;
+        document.getElementById('registerPage').classList.add('hidden');
+        const mainPage = document.getElementById('mainPage');
+        mainPage.style.display = 'block';
+        setTimeout(() => {
+            mainPage.classList.add('show');
+        }, 100);
+
+        if (!window.plansRendered) {
+            renderPlans();
+            window.plansRendered = true;
+        }
+        updateDashboard();
+
+        setTimeout(() => {
+            alert(`✅ ثبت‌نام موفق!\nبه خانواده Potato خوش آمدید ${fullName} 🥔\n\n💰 ۱۰۰ USDT هدیه به حسابتان واریز شد.\nسود روزانه ۱۰٪ برای همه پلن‌ها`);
+        }, 300);
+    });
+
+    // ===== ۱۰. بررسی ثبت‌نام قبلی =====
+    window.addEventListener('DOMContentLoaded', function() {
+        const savedUsername = localStorage.getItem('potato_username');
+        if (savedUsername) {
+            document.getElementById('displayUsername').textContent = savedUsername;
+            document.getElementById('registerPage').classList.add('hidden');
+            const mainPage = document.getElementById('mainPage');
+            mainPage.style.display = 'block';
+            setTimeout(() => {
+                mainPage.classList.add('show');
+            }, 100);
+            if (!window.plansRendered) {
+                renderPlans();
+                window.plansRendered = true;
+            }
+            updateDashboard();
+        }
+    });
+</script>
+
+</body>
+</html>
